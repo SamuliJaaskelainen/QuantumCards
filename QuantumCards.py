@@ -24,6 +24,9 @@ BUTTON_SOUNDS = [pg.mixer.Sound('ButtonSound1.ogg'), pg.mixer.Sound('ButtonSound
 ui_state=0  #0=game, 1=score, 2=help
 run_score=0 #0=none, 1=simulation, 2=simulation with noise, 3=quantum computer
 check_strings=False
+phase1_score = []
+phase2_score = []
+phase3_score = []
 
 class InputBox:
 
@@ -272,20 +275,20 @@ def main():
             if run_score is 1:
                 print('RUN SIMULATION')
                 run_score = 0
-                #qe.get_scores(game1.get_text(), number_of_players, True, False)
-                #qe.get_scores(game2.get_text()', number_of_players, True, False)
-                #qe.get_scores(game3.get_text()', number_of_players, True, False)
+                #phase1_score = qe.get_scores(game1.get_text(), number_of_players, True, False)
+                #phase2_score = qe.get_scores(game2.get_text()', number_of_players, True, False)
+                #phase3_score = qe.get_scores(game3.get_text()', number_of_players, True, False)
             elif run_score is 2:
                 print('RUN SIMULATION WITH NOISE')
-                #qe.get_scores(game1.get_text(), number_of_players, True, True)
-                #qe.get_scores(game2.get_text(), number_of_players, True, True)
-                #qe.get_scores(game3.get_text(), number_of_players, True, True)
+                #phase1_score = qe.get_scores(game1.get_text(), number_of_players, True, True)
+                #phase2_score = qe.get_scores(game2.get_text(), number_of_players, True, True)
+                #phase3_score = qe.get_scores(game3.get_text(), number_of_players, True, True)
                 run_score = 0
             elif run_score is 3:
                 print('RUN QUANTUM COMPUTER')
-                #qe.get_scores(game1.get_text(), number_of_players, False)
-                #qe.get_scores(game2.get_text(), number_of_players, False)
-                #qe.get_scores(game3.get_text(), number_of_players, False)
+                #phase1_score = qe.get_scores(game1.get_text(), number_of_players, False)
+                #phase2_score = qe.get_scores(game2.get_text(), number_of_players, False)
+                #phase3_score = qe.get_scores(game3.get_text(), number_of_players, False)
                 run_score = 0
 
         pg.display.flip()

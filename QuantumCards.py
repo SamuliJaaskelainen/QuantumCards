@@ -1,5 +1,6 @@
 import pygame as pg
 import random
+#import QuantumEngine as qe
 
 pg.init()
 pg.display.set_caption('Quantum Cards')
@@ -16,7 +17,6 @@ BUTTON_HOVER = pg.image.load("ButtonHover.png")
 BUTTON_PRESSED = pg.image.load("ButtonPressed.png")
 number_of_players=3
 buttons_players=[]
-frames=0
 
 class InputBox:
 
@@ -70,7 +70,6 @@ class ButtonBox:
 
     def press_event(self):
         self.button_event()
-        self.lastPressTime = frames
         print('ticks', self.lastPressTime)
         if(self.toggle):
             self.pressed = not self.pressed;
@@ -135,7 +134,6 @@ def Calculate():
     
 def main():
     clock = pg.time.Clock()
-    frames = 0
     
     game1 = InputBox(150, 500, 1000, 32)
     game2 = InputBox(150, 540, 1000, 32)
@@ -198,7 +196,6 @@ def main():
         #            ticks = button.lastPressTime
         #            button.reset()
 
-        frames += 1
         pg.display.flip()
         clock.tick(60)
 

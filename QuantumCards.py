@@ -1,6 +1,6 @@
 import pygame as pg
 import random
-import QuantumEngine as qe
+#import QuantumEngine as qe
 
 pg.init()
 pg.display.set_caption('Quantum Cards')
@@ -10,13 +10,22 @@ COLOR_INACTIVE = pg.Color('gray')
 COLOR_ACTIVE = pg.Color('pink')
 COLOR_BLACK = pg.Color('black')
 FONT = pg.font.Font("Calibri.ttf", 32)
-FONT_BOLD = pg.font.Font("Calibrib.ttf", 32)
-BG = pg.image.load("Bg.png")
+FONT_BOLD = pg.font.Font("Calibrib.ttf", 24)
+BG = pg.image.load("GameUI/BG.png")
 BG_RECT = BG.get_rect()
 BUTTON = pg.image.load("Button.png")
 BUTTON_HOVER = pg.image.load("ButtonHover.png")
 BUTTON_PRESSED = pg.image.load("ButtonPressed.png")
+CORRECT_STRING = pg.image.load("GameUI/correct.png")
+NOT_CORRECT_STRING = pg.image.load("GameUI/notcorrect.png")
+GAME1_RECT = pg.Rect(1174, 288, 38, 39)
+GAME2_RECT = pg.Rect(1174, 388, 38, 39)
+GAME3_RECT = pg.Rect(1174, 488, 38, 39)
+SPEECH_BUBBLE = pg.image.load("GameUI/Speachboubble.png")
+SPEECH_BUBBLE_RECT = pg.Rect(692, 40, 240, 82)
+SPEECH_BUBBLE_TEXT_RECT = pg.Rect(710, 70, 240, 82)
 number_of_players=3
+starting_player = 1
 buttons_players=[]
 pg.mixer.music.load('Music.ogg')
 pg.mixer.music.play(-1)
@@ -75,11 +84,11 @@ class ButtonBox:
     global BUTTON_SOUNDS
 
     def __init__(self, x, y, w, h, img_not_pressed, img_hover, img_pressed, toggle, button_event):
-        self.rect = pg.Rect(x, y, w, h);
+        self.rect = pg.Rect(x, y, w, h)
         self.not_pressed = img_not_pressed
         self.img_hover = img_hover
         self.img_pressed = img_pressed
-        self.button_event = button_event;
+        self.button_event = button_event
         self.toggle = toggle
         self.pressed = False
 
@@ -94,7 +103,7 @@ class ButtonBox:
                 self.button_event()
                 BUTTON_SOUNDS[random.randint(0, 2)].play()
                 if(self.toggle):
-                    self.pressed = not self.pressed;
+                    self.pressed = not self.pressed
 
     def reset(self):
         self.pressed = False;
@@ -143,7 +152,8 @@ def SetPlayerToFive():
     GetStartingPlayer()
     
 def GetStartingPlayer():
-    starting_player = random.randint(0, number_of_players) + 1
+    global starting_player
+    starting_player = random.randint(1, number_of_players)
 
 def Simulate():
     global run_score
@@ -179,8 +189,7 @@ def ShowHelp():
     print('Show help ui')
 
 def main():
-    global run_score
-    global check_strings
+    global run_score, starting_player, check_strings
     clock = pg.time.Clock()
     
     game1 = InputBox(150, 500, 1000, 32)
@@ -188,15 +197,15 @@ def main():
     game3 = InputBox(150, 580, 1000, 32)
     input_boxes = [game1, game2, game3]
     
-    button_two_p = ButtonBox(30,50,100,32, BUTTON, BUTTON_HOVER, BUTTON_PRESSED, True, SetPlayerToTwo)
-    button_three_p = ButtonBox(30,20,100,32, BUTTON, BUTTON_HOVER, BUTTON_PRESSED, True, SetPlayerToThree)
-    button_four_p = ButtonBox(160,20,100,32, BUTTON, BUTTON_HOVER, BUTTON_PRESSED, True, SetPlayerToFour)
-    button_five_p = ButtonBox(290,20,100,32, BUTTON, BUTTON_HOVER, BUTTON_PRESSED, True, SetPlayerToFive)
-    button_random_p = ButtonBox(500,20,100,32, BUTTON, BUTTON_HOVER, BUTTON_PRESSED, False, GetStartingPlayer)
-    button_simulate = ButtonBox(200,680,100,32, BUTTON, BUTTON_HOVER, BUTTON_PRESSED, False, Simulate)
-    button_simulate_noisy = ButtonBox(350,680,100,32, BUTTON, BUTTON_HOVER, BUTTON_PRESSED, False, SimulateWithNoise)
-    button_calculate = ButtonBox(500,680,100,32, BUTTON, BUTTON_HOVER, BUTTON_PRESSED, False, Calculate)
-    button_help = ButtonBox(1000,20,100,32, BUTTON, BUTTON_HOVER, BUTTON_PRESSED, False, ShowHelp)
+    button_two_p = ButtonBox(62,57,110,27, pg.image.load("GameUI/2players.png"), pg.image.load("GameUI/2players_hover.png"), pg.image.load("GameUI/2players_select.png"), True, SetPlayerToTwo)
+    button_three_p = ButtonBox(210,57,110,27, pg.image.load("GameUI/3players.png"), pg.image.load("GameUI/3players_hover.png"), pg.image.load("GameUI/3players_select.png"), True, SetPlayerToThree)
+    button_four_p = ButtonBox(358,57,110,27, pg.image.load("GameUI/4players.png"), pg.image.load("GameUI/4players_hover.png"), pg.image.load("GameUI/4players_select.png"), True, SetPlayerToFour)
+    button_five_p = ButtonBox(514,57,110,27, pg.image.load("GameUI/5player.png"), pg.image.load("GameUI/5player_hover.png"), pg.image.load("GameUI/5player_select.png"), True, SetPlayerToFive)
+    button_random_p = ButtonBox(950,40,71,72, pg.image.load("GameUI/dice.png"), pg.image.load("GameUI/dice_hover.png"), pg.image.load("GameUI/dice.png"), False, GetStartingPlayer)
+    button_simulate = ButtonBox(70,591,228,92, pg.image.load("GameUI/simulate.png"), pg.image.load("GameUI/simulate_hover.png"), pg.image.load("GameUI/simulate.png"), False, Simulate)
+    button_simulate_noisy = ButtonBox(385,591,448,93, pg.image.load("GameUI/simulatewithnoise.png"), pg.image.load("GameUI/simulatewithnoise_hover.png"), pg.image.load("GameUI/simulatewithnoise.png"), False, SimulateWithNoise)
+    button_calculate = ButtonBox(915,591,292,92, pg.image.load("GameUI/goquantum.png"), pg.image.load("GameUI/goquantum_hover.png"), pg.image.load("GameUI/goquantum.png"), False, Calculate)
+    button_help = ButtonBox(1143,40,71,72, pg.image.load("GameUI/help.png"), pg.image.load("GameUI/help_hover.png"), pg.image.load("GameUI/help.png"), False, ShowHelp)
     buttons_players.append(button_two_p)
     buttons_players.append(button_three_p)
     buttons_players.append(button_four_p)
@@ -249,29 +258,39 @@ def main():
             for button in buttons:
                 button.draw(screen)
                 
-            if check_strings:
-                if qe.check_game(game1.get_text(),number_of_players):
-                    print("OK1")
-                    #blit game1 ok
-                else:
-                    print("Not OK1")
-                    #blit game1 not ok
-                    
-                if qe.check_game(game2.get_text(),number_of_players):
-                    print("OK2")
-                    #blit game2 ok
-                else:
-                    print("Not OK2")
-                    #blit game2 not ok
-                    
-                if qe.check_game(game3.get_text(),number_of_players):
-                    print("OK3")
-                    #blit game1 ok
-                else:
-                    print("Not OK3")
-                    #blit game1 not ok
-                check_strings = False
-                
+            #if check_strings:
+            #    if qe.check_game(game1.get_text(),number_of_players):
+            #        print("OK1")
+            #        screen.blit(CORRECT_STRING, GAME1_RECT)
+            #    else:
+            #        print("Not OK1")
+            #        screen.blit(NOT_CORRECT_STRING, GAME1_RECT)
+            #        
+            #    if qe.check_game(game2.get_text(),number_of_players):
+            #        print("OK2")
+            #        screen.blit(CORRECT_STRING, GAME2_RECT)
+            #    else:
+            #        print("Not OK2")
+            #        screen.blit(NOT_CORRECT_STRING, GAME2_RECT)
+            #        
+            #    if qe.check_game(game3.get_text(),number_of_players):
+            #        print("OK3")
+            #        screen.blit(CORRECT_STRING, GAME3_RECT)
+            #    else:
+            #        print("Not OK3")
+            #        screen.blit(CORRECT_STRING, GAME3_RECT)
+            #    check_strings = False
+            #    
+            # TODO: Delete 3 lines underneath
+            screen.blit(CORRECT_STRING, GAME1_RECT)
+            screen.blit(CORRECT_STRING, GAME2_RECT)
+            screen.blit(CORRECT_STRING, GAME3_RECT)
+            
+            screen.blit(SPEECH_BUBBLE, SPEECH_BUBBLE_RECT)
+            starting_player_surface = FONT_BOLD.render("PLAYER " + str(starting_player) + " STARTS", False, (0, 0, 0))
+            screen.blit(starting_player_surface, SPEECH_BUBBLE_TEXT_RECT)
+            
+            
         elif ui_state is 1:
             button_exit_score.draw(screen)
         elif ui_state is 2:
@@ -280,21 +299,21 @@ def main():
         if ui_state is 1:
             if run_score is 1:
                 print('RUN SIMULATION')
+                #phase1_score = qe.get_scores(game1.get_text(), number_of_players, True, False)
+                #phase2_score = qe.get_scores(game2.get_text(), number_of_players, True, False)
+                #phase3_score = qe.get_scores(game3.get_text(), number_of_players, True, False)
                 run_score = 0
-                phase1_score = qe.get_scores(game1.get_text(), number_of_players, True, False)
-                phase2_score = qe.get_scores(game2.get_text(), number_of_players, True, False)
-                phase3_score = qe.get_scores(game3.get_text(), number_of_players, True, False)
             elif run_score is 2:
                 print('RUN SIMULATION WITH NOISE')
-                phase1_score = qe.get_scores(game1.get_text(), number_of_players, True, True)
-                phase2_score = qe.get_scores(game2.get_text(), number_of_players, True, True)
-                phase3_score = qe.get_scores(game3.get_text(), number_of_players, True, True)
+                #phase1_score = qe.get_scores(game1.get_text(), number_of_players, True, True)
+                #phase2_score = qe.get_scores(game2.get_text(), number_of_players, True, True)
+                #phase3_score = qe.get_scores(game3.get_text(), number_of_players, True, True)
                 run_score = 0
             elif run_score is 3:
                 print('RUN QUANTUM COMPUTER')
-                phase1_score = qe.get_scores(game1.get_text(), number_of_players, False)
-                phase2_score = qe.get_scores(game2.get_text(), number_of_players, False)
-                phase3_score = qe.get_scores(game3.get_text(), number_of_players, False)
+                #phase1_score = qe.get_scores(game1.get_text(), number_of_players, False)
+                #phase2_score = qe.get_scores(game2.get_text(), number_of_players, False)
+                #phase3_score = qe.get_scores(game3.get_text(), number_of_players, False)
                 run_score = 0
             #print(phase1_score)
             #print(phase2_score)

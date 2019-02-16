@@ -45,7 +45,7 @@ def get_scores(game, s, simulate = True, noisy = False):
 		elif g == "C":
 			p1 = pq[int(game[i+1])-1]
 			p2 = pq[int(game[i+2])-1]
-			qc.cx(q[p2], q[p1])
+			qc.cx(q[p1], q[p2])
 			i += 3
 		elif g == "S":
 			p1 = pq[int(game[i+1])-1]

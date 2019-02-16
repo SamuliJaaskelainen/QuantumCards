@@ -17,6 +17,10 @@ BUTTON_HOVER = pg.image.load("ButtonHover.png")
 BUTTON_PRESSED = pg.image.load("ButtonPressed.png")
 number_of_players=3
 buttons_players=[]
+pg.mixer.music.load('Music.ogg')
+pg.mixer.music.play(-1)
+BUTTON_SOUNDS = [pg.mixer.Sound('ButtonSound1.ogg'), pg.mixer.Sound('ButtonSound2.ogg'), pg.mixer.Sound('ButtonSound3.ogg')]
+ui_state=0 #0=game, 1=score, 2=help
 
 class InputBox:
 
@@ -57,6 +61,7 @@ class InputBox:
         pg.draw.rect(screen, self.color, self.rect, 2)
 
 class ButtonBox:
+    global BUTTON_SOUNDS
 
     def __init__(self, x, y, w, h, img_not_pressed, img_hover, img_pressed, toggle, button_event):
         self.rect = pg.Rect(x, y, w, h);
@@ -66,11 +71,9 @@ class ButtonBox:
         self.button_event = button_event;
         self.toggle = toggle
         self.pressed = False
-        self.lastPressTime = 0
 
     def press_event(self):
         self.button_event()
-        print('ticks', self.lastPressTime)
         if(self.toggle):
             self.pressed = not self.pressed;
 
@@ -78,6 +81,7 @@ class ButtonBox:
         if event.type == pg.MOUSEBUTTONDOWN:
             if self.rect.collidepoint(event.pos):
                 self.button_event()
+                BUTTON_SOUNDS[random.randint(0, 2)].play()
                 if(self.toggle):
                     self.pressed = not self.pressed;
 
@@ -98,7 +102,6 @@ class ButtonBox:
 def SetPlayerToThree():
     global buttons_players
     print('Set player number to three')
-    print('L', len(buttons_players))
     for button in buttons_players:
         button.reset()
     number_of_players=3;
@@ -125,13 +128,28 @@ def GetStartingPlayer():
 
 def Simulate():
     print('simulate result')
+    ShowScore()
 
 def SimulateWithNoise():
     print('simulate result with noise')
+    ShowScore()
 
 def Calculate():
     print('calculate result with quantum computer')
-    
+    ShowScore()
+
+def ShowGame():
+    global ui_state
+    ui_state=0
+
+def ShowScore():
+    global ui_state
+    ui_state=1
+
+def ShowHelp():
+    global ui_state
+    ui_state=2
+
 def main():
     clock = pg.time.Clock()
     
@@ -147,54 +165,61 @@ def main():
     button_simulate = ButtonBox(200,680,100,32, BUTTON, BUTTON_HOVER, BUTTON_PRESSED, False, Simulate)
     button_simulate_noisy = ButtonBox(350,680,100,32, BUTTON, BUTTON_HOVER, BUTTON_PRESSED, False, SimulateWithNoise)
     button_calculate = ButtonBox(500,680,100,32, BUTTON, BUTTON_HOVER, BUTTON_PRESSED, False, Calculate)
+    button_help = ButtonBox(1000,20,100,32, BUTTON, BUTTON_HOVER, BUTTON_PRESSED, False, ShowHelp)
     buttons_players.append(button_three_p)
     buttons_players.append(button_four_p)
     buttons_players.append(button_five_p)
-    buttons = [button_random_p, button_simulate, button_simulate_noisy, button_calculate]
+    buttons = [button_random_p, button_simulate, button_simulate_noisy, button_calculate, button_help]
     button_five_p.press_event()
+    
+    button_exit_help = ButtonBox(1000,20,100,32, BUTTON, BUTTON_HOVER, BUTTON_PRESSED, False, ShowGame)
+    
+    button_exit_score = ButtonBox(1000,20,100,32, BUTTON, BUTTON_HOVER, BUTTON_PRESSED, False, ShowGame)
     
     running = True
     while running:
+
+        screen.fill(COLOR_BLACK)
 
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 running = False
 
-            for box in input_boxes:
-                box.handle_event(event)
-                
-            for button in buttons_players:
-                button.handle_event(event)
-                
-            for button in buttons:
-                button.handle_event(event)
+            if ui_state is 0:
+                for box in input_boxes:
+                    box.handle_event(event)
 
-        for box in input_boxes:
-            box.update()
+                for button in buttons_players:
+                    button.handle_event(event)
 
-        screen.fill(COLOR_BLACK)
-        screen.blit(BG, BG_RECT)
+                for button in buttons:
+                    button.handle_event(event)
 
-        for box in input_boxes:
-            box.draw(screen)
+            elif ui_state is 1:
+                button_exit_score.handle_event(event)
+            elif ui_state is 2:
+                button_exit_help.handle_event(event)
 
-        player_buttons_pressed = 0
-        for button in buttons_players:
-            if button.pressed:
-                player_buttons_pressed += 1
+        if(ui_state is 0):
         
-        for button in buttons_players:
-            button.draw(screen)
+            for box in input_boxes:
+                box.update()
 
-        for button in buttons:
-            button.draw(screen)
-            
-        #if player_buttons_pressed is not 1:
-        #    ticks = 9999999
-        #    for button in buttons_players:
-        #        if button.lastPressTime < ticks:
-        #            ticks = button.lastPressTime
-        #            button.reset()
+            screen.blit(BG, BG_RECT)
+
+            for box in input_boxes:
+                box.draw(screen)
+
+            for button in buttons_players:
+                button.draw(screen)
+
+            for button in buttons:
+                button.draw(screen)
+                
+        elif ui_state is 1:
+            button_exit_score.draw(screen)
+        elif ui_state is 2:
+            button_exit_help.draw(screen)
 
         pg.display.flip()
         clock.tick(60)

@@ -21,6 +21,7 @@ pg.mixer.music.load('Music.ogg')
 pg.mixer.music.play(-1)
 BUTTON_SOUNDS = [pg.mixer.Sound('ButtonSound1.ogg'), pg.mixer.Sound('ButtonSound2.ogg'), pg.mixer.Sound('ButtonSound3.ogg')]
 ui_state=0 #0=game, 1=score, 2=help
+run_score=0#0=none, 1=simulation, 2=simulation with noise, 3=quantum computer
 
 class InputBox:
 
@@ -99,6 +100,14 @@ class ButtonBox:
         else:
             screen.blit(self.not_pressed, self.rect)
 
+def SetPlayerToTwo():
+    global buttons_players
+    print('Set player number to two')
+    for button in buttons_players:
+        button.reset()
+    number_of_players=2;
+    GetStartingPlayer()
+            
 def SetPlayerToThree():
     global buttons_players
     print('Set player number to three')
@@ -127,30 +136,40 @@ def GetStartingPlayer():
     starting_player = random.randint(0, number_of_players) + 1
 
 def Simulate():
-    print('simulate result')
+    global run_score
+    print('Simulate result')
     ShowScore()
+    run_score=1
 
 def SimulateWithNoise():
-    print('simulate result with noise')
+    global run_score
+    print('Simulate result with noise')
     ShowScore()
+    run_score=2
 
 def Calculate():
-    print('calculate result with quantum computer')
+    global run_score
+    print('Calculate result with quantum computer')
     ShowScore()
+    run_score=3
 
 def ShowGame():
     global ui_state
     ui_state=0
+    print('Show game ui')
 
 def ShowScore():
     global ui_state
     ui_state=1
+    print('Show score ui')
 
 def ShowHelp():
     global ui_state
     ui_state=2
+    print('Show help ui')
 
 def main():
+    global run_score
     clock = pg.time.Clock()
     
     game1 = InputBox(150, 500, 1000, 32)
@@ -158,6 +177,7 @@ def main():
     game3 = InputBox(150, 580, 1000, 32)
     input_boxes = [game1, game2, game3]
     
+    button_two_p = ButtonBox(30,50,100,32, BUTTON, BUTTON_HOVER, BUTTON_PRESSED, True, SetPlayerToTwo)
     button_three_p = ButtonBox(30,20,100,32, BUTTON, BUTTON_HOVER, BUTTON_PRESSED, True, SetPlayerToThree)
     button_four_p = ButtonBox(160,20,100,32, BUTTON, BUTTON_HOVER, BUTTON_PRESSED, True, SetPlayerToFour)
     button_five_p = ButtonBox(290,20,100,32, BUTTON, BUTTON_HOVER, BUTTON_PRESSED, True, SetPlayerToFive)
@@ -166,6 +186,7 @@ def main():
     button_simulate_noisy = ButtonBox(350,680,100,32, BUTTON, BUTTON_HOVER, BUTTON_PRESSED, False, SimulateWithNoise)
     button_calculate = ButtonBox(500,680,100,32, BUTTON, BUTTON_HOVER, BUTTON_PRESSED, False, Calculate)
     button_help = ButtonBox(1000,20,100,32, BUTTON, BUTTON_HOVER, BUTTON_PRESSED, False, ShowHelp)
+    buttons_players.append(button_two_p)
     buttons_players.append(button_three_p)
     buttons_players.append(button_four_p)
     buttons_players.append(button_five_p)
@@ -183,6 +204,7 @@ def main():
 
         for event in pg.event.get():
             if event.type == pg.QUIT:
+                print('Goodbye! Thanks for playing.')
                 running = False
 
             if ui_state is 0:
@@ -220,6 +242,17 @@ def main():
             button_exit_score.draw(screen)
         elif ui_state is 2:
             button_exit_help.draw(screen)
+            
+        if ui_state is 1:
+            if run_score is 1:
+                print('RUN SIMULATION')
+                run_score = 0
+            elif run_score is 2:
+                print('RUN SIMULATION WITH NOISE')
+                run_score = 0
+            elif run_score is 3:
+                print('RUN QUANTUM COMPUTER')
+                run_score = 0
 
         pg.display.flip()
         clock.tick(60)

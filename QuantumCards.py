@@ -20,8 +20,9 @@ buttons_players=[]
 pg.mixer.music.load('Music.ogg')
 pg.mixer.music.play(-1)
 BUTTON_SOUNDS = [pg.mixer.Sound('ButtonSound1.ogg'), pg.mixer.Sound('ButtonSound2.ogg'), pg.mixer.Sound('ButtonSound3.ogg')]
-ui_state=0 #0=game, 1=score, 2=help
-run_score=0#0=none, 1=simulation, 2=simulation with noise, 3=quantum computer
+ui_state=0  #0=game, 1=score, 2=help
+run_score=0 #0=none, 1=simulation, 2=simulation with noise, 3=quantum computer
+check_strings=False
 
 class InputBox:
 
@@ -40,6 +41,8 @@ class InputBox:
                 self.active = False
 
         if event.type == pg.KEYDOWN:
+            global check_strings
+            check_strings = True
             if self.active:
                 if event.key == pg.K_RETURN:
                     self.active = not self.active
@@ -60,6 +63,9 @@ class InputBox:
     def draw(self, screen):
         screen.blit(self.txt_surface, (self.rect.x+5, self.rect.y+5))
         pg.draw.rect(screen, self.color, self.rect, 2)
+        
+    def get_text():
+        return self.text
 
 class ButtonBox:
     global BUTTON_SOUNDS
@@ -170,6 +176,7 @@ def ShowHelp():
 
 def main():
     global run_score
+    global check_strings
     clock = pg.time.Clock()
     
     game1 = InputBox(150, 500, 1000, 32)
@@ -238,6 +245,23 @@ def main():
             for button in buttons:
                 button.draw(screen)
                 
+            if check_strings:
+                #if qe.check_game(game1.get_text())
+                    #blit game1 ok
+                #else
+                    #blit game1 not ok
+                    
+                #if qe.check_game(game2.get_text())
+                    #blit game2 ok
+                #else
+                    #blit game2 not ok
+                    
+                #if qe.check_game(game3.get_text())
+                    #blit game3 ok
+                #else
+                    #blit game3 not ok
+                check_strings = False
+                
         elif ui_state is 1:
             button_exit_score.draw(screen)
         elif ui_state is 2:
@@ -247,11 +271,20 @@ def main():
             if run_score is 1:
                 print('RUN SIMULATION')
                 run_score = 0
+                #qe.get_scores(game1.get_text(), number_of_players, True, False)
+                #qe.get_scores(game2.get_text()', number_of_players, True, False)
+                #qe.get_scores(game3.get_text()', number_of_players, True, False)
             elif run_score is 2:
                 print('RUN SIMULATION WITH NOISE')
+                #qe.get_scores(game1.get_text(), number_of_players, True, True)
+                #qe.get_scores(game2.get_text(), number_of_players, True, True)
+                #qe.get_scores(game3.get_text(), number_of_players, True, True)
                 run_score = 0
             elif run_score is 3:
                 print('RUN QUANTUM COMPUTER')
+                #qe.get_scores(game1.get_text(), number_of_players, False)
+                #qe.get_scores(game2.get_text(), number_of_players, False)
+                #qe.get_scores(game3.get_text(), number_of_players, False)
                 run_score = 0
 
         pg.display.flip()

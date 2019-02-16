@@ -42,14 +42,6 @@ def get_scores(game, s, simulate = True, noisy = False):
 			p = pq[int(game[i+1])-1]
 			qc.z(q[p])
 			i += 2
-		elif g == "T":
-			p = pq[int(game[i+1])-1]
-			qc.t(q[p])
-			i += 2
-		elif g == "R":
-			p = pq[int(game[i+1])-1]
-			qc.reset(q[p])
-			i += 2
 		elif g == "C":
 			p1 = pq[int(game[i+1])-1]
 			p2 = pq[int(game[i+2])-1]
@@ -94,3 +86,29 @@ def get_scores(game, s, simulate = True, noisy = False):
 				score[p] += c
 	
 	return score;
+
+def check_game(game, s):
+	gates = {"H": 1, "I": 1, "X": 1, "Y": 1, "Z": 1, "C": 2, "S": 2}	
+	valid = True
+	i = 0
+	while i < len(game):
+		g = game[i].upper()
+		if g not in gates:
+			valid = False
+			break
+		else:
+			if i + gates[g] >= len(game):
+				valid = False
+				break
+			for j in range(0, gates[g]):
+				n = game[i+j+1]
+				if ord(n) not in range(ord("1"), ord("1")+s):
+					valid = False
+					break
+			if gates[g] > 1 and game[i+1] == game[i+2]:
+				valid = False
+				break
+		i += gates[g] + 1
+	
+	return valid;
+	

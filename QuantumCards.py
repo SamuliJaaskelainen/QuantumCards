@@ -226,8 +226,10 @@ def main():
     buttons_players.append(button_three_p)
     buttons_players.append(button_four_p)
     buttons_players.append(button_five_p)
-    buttons = [button_random_p, button_simulate, button_simulate_noisy, button_calculate, button_help, button_mute]
+    buttons = [button_random_p, button_help, button_mute]
+    buttons_calculate = [button_simulate, button_simulate_noisy, button_calculate]
     button_five_p.press_event()
+    show_calculation_buttons=True
     
     button_exit_score = ButtonBox(1169,108,78,77, pg.image.load("ScoreUI/reset.png"), pg.image.load("ScoreUI/reset_hover.png"), pg.image.load("ScoreUI/reset.png"), False, ShowGame)
     column1x = 410
@@ -262,6 +264,10 @@ def main():
                 for button in buttons:
                     button.handle_event(event)
 
+                if show_calculation_buttons:
+                    for button in buttons_calculate:
+                        button.handle_event(event)
+
             elif ui_state is 1:
                 button_exit_score.handle_event(event)
             elif ui_state is 2:
@@ -284,11 +290,13 @@ def main():
                 button.draw(screen)
                 
             #if check_strings:
+            #    show_calculation_buttons = True
             #    if qe.check_game(game1.get_text(),number_of_players):
             #        print("OK1")
             #        screen.blit(CORRECT_STRING, GAME1_RECT)
             #    else:
             #        print("Not OK1")
+            #        show_calculation_buttons = False
             #        screen.blit(NOT_CORRECT_STRING, GAME1_RECT)
             #        
             #    if qe.check_game(game2.get_text(),number_of_players):
@@ -296,6 +304,7 @@ def main():
             #        screen.blit(CORRECT_STRING, GAME2_RECT)
             #    else:
             #        print("Not OK2")
+            #        show_calculation_buttons = False
             #        screen.blit(NOT_CORRECT_STRING, GAME2_RECT)
             #        
             #    if qe.check_game(game3.get_text(),number_of_players):
@@ -303,6 +312,7 @@ def main():
             #        screen.blit(CORRECT_STRING, GAME3_RECT)
             #    else:
             #        print("Not OK3")
+            #        show_calculation_buttons = False
             #        screen.blit(CORRECT_STRING, GAME3_RECT)
             #    check_strings = False
             #    
@@ -310,6 +320,10 @@ def main():
             screen.blit(CORRECT_STRING, GAME1_RECT)
             screen.blit(CORRECT_STRING, GAME2_RECT)
             screen.blit(CORRECT_STRING, GAME3_RECT)
+            
+            if show_calculation_buttons:
+                for button in buttons_calculate:
+                    button.draw(screen)
             
             screen.blit(SPEECH_BUBBLE, SPEECH_BUBBLE_RECT)
             starting_player_surface = FONT_BOLD.render("PLAYER " + str(starting_player) + " STARTS", False, COLOR_WHITE)

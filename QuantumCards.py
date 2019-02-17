@@ -30,6 +30,7 @@ SPEECH_BUBBLE_TEXT_RECT = pg.Rect(717, 70, 240, 82)
 
 SCORE_BG = pg.image.load("ScoreUI/score_BG.png")
 HIDE_PLAYERS = pg.image.load("ScoreUI/hide.png")
+VICTORY_DOT = pg.image.load("ScoreUI/victory dot.png")
 
 number_of_players=3
 starting_player = 1
@@ -394,6 +395,22 @@ def main():
             elif number_of_players is 4:
                 screen.blit(HIDE_PLAYERS, pg.Rect(0, 592, 0, 0))
             
+            if victory_order[0] is 1:
+                screen.blit(VICTORY_DOT, pg.Rect(138,241,0,0))
+                screen.blit(VICTORY_DOT, pg.Rect(1137,241,0,0))
+            if victory_order[1] is 1:
+                screen.blit(VICTORY_DOT, pg.Rect(138,341,0,0))
+                screen.blit(VICTORY_DOT, pg.Rect(1137,341,0,0))
+            if victory_order[2] is 1:
+                screen.blit(VICTORY_DOT, pg.Rect(138,440,0,0))
+                screen.blit(VICTORY_DOT, pg.Rect(1137,440,0,0))
+            if victory_order[3] is 1:
+                screen.blit(VICTORY_DOT, pg.Rect(138,538,0,0))
+                screen.blit(VICTORY_DOT, pg.Rect(1137,538,0,0))
+            if victory_order[4] is 1:
+                screen.blit(VICTORY_DOT, pg.Rect(138,635,0,0))
+                screen.blit(VICTORY_DOT, pg.Rect(1137,635,0,0))
+            
         elif ui_state is 2:
             button_exit_help.draw(screen)
             
@@ -431,7 +448,6 @@ def main():
             for i in range(0, 5):
                 victory_order[i] = different_scores.index(total_scores[i])+1
             
-           
         pg.display.flip()
         clock.tick(60)
 

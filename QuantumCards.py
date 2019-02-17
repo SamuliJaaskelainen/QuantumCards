@@ -1,6 +1,6 @@
 import pygame as pg
 import random
-#import QuantumEngine as qe
+import QuantumEngine as qe
 
 pg.init()
 pg.display.set_caption('Quantum Cards')
@@ -40,6 +40,9 @@ BUTTON_SOUNDS = [pg.mixer.Sound('Audio/ButtonSound1.ogg'), pg.mixer.Sound('Audio
 ui_state=0  #0=game, 1=score, 2=help
 run_score=0 #0=none, 1=simulation, 2=simulation with noise, 3=quantum computer
 check_strings=False
+STR1 = CORRECT_STRING
+STR2 = CORRECT_STRING
+STR3 = CORRECT_STRING
 phase1_score = []
 phase2_score = []
 phase3_score = []
@@ -161,7 +164,8 @@ def SetPlayerToFive():
     GetStartingPlayer()
     
 def GetStartingPlayer():
-    global starting_player
+    global starting_player, check_strings
+    check_strings = True
     starting_player = random.randint(1, number_of_players)
 
 def Simulate():
@@ -204,7 +208,7 @@ def ToggleMusic():
         pg.mixer.music.set_volume(1)
         
 def main():
-    global run_score, starting_player, check_strings
+    global run_score, starting_player, check_strings, STR1, STR2, STR3
     clock = pg.time.Clock()
     
     game1 = InputBox(250, 292, 1000, 32)
@@ -241,6 +245,7 @@ def main():
     player3y = 439
     player4y = 533
     player5y = 634
+    victory_order = [0]*5
     
     button_exit_help = ButtonBox(1169,108,78,77, pg.image.load("ScoreUI/reset.png"), pg.image.load("ScoreUI/reset_hover.png"), pg.image.load("ScoreUI/reset.png"), False, ShowGame)
     
@@ -289,37 +294,31 @@ def main():
             for button in buttons:
                 button.draw(screen)
                 
-            #if check_strings:
-            #    show_calculation_buttons = True
-            #    if qe.check_game(game1.get_text(),number_of_players):
-            #        print("OK1")
-            #        screen.blit(CORRECT_STRING, GAME1_RECT)
-            #    else:
-            #        print("Not OK1")
-            #        show_calculation_buttons = False
-            #        screen.blit(NOT_CORRECT_STRING, GAME1_RECT)
-            #        
-            #    if qe.check_game(game2.get_text(),number_of_players):
-            #        print("OK2")
-            #        screen.blit(CORRECT_STRING, GAME2_RECT)
-            #    else:
-            #        print("Not OK2")
-            #        show_calculation_buttons = False
-            #        screen.blit(NOT_CORRECT_STRING, GAME2_RECT)
-            #        
-            #    if qe.check_game(game3.get_text(),number_of_players):
-            #        print("OK3")
-            #        screen.blit(CORRECT_STRING, GAME3_RECT)
-            #    else:
-            #        print("Not OK3")
-            #        show_calculation_buttons = False
-            #        screen.blit(CORRECT_STRING, GAME3_RECT)
-            #    check_strings = False
-            #    
+            if check_strings:
+                show_calculation_buttons = True
+                if qe.check_game(game1.get_text(),number_of_players):
+                    STR1 = CORRECT_STRING
+                else:
+                    STR1 = NOT_CORRECT_STRING
+                    show_calculation_buttons = False
+                    
+                if qe.check_game(game2.get_text(),number_of_players):
+                    STR2 = CORRECT_STRING
+                else:
+                    STR2 = NOT_CORRECT_STRING
+                    show_calculation_buttons = False
+                    
+                if qe.check_game(game3.get_text(),number_of_players):
+                    STR3 = CORRECT_STRING
+                else:
+                    STR3 = NOT_CORRECT_STRING
+                    show_calculation_buttons = False
+                check_strings = False
+                
             # TODO: Delete 3 lines underneath
-            screen.blit(CORRECT_STRING, GAME1_RECT)
-            screen.blit(CORRECT_STRING, GAME2_RECT)
-            screen.blit(CORRECT_STRING, GAME3_RECT)
+            screen.blit(STR1, GAME1_RECT)
+            screen.blit(STR2, GAME2_RECT)
+            screen.blit(STR3, GAME3_RECT)
             
             if show_calculation_buttons:
                 for button in buttons_calculate:
@@ -336,10 +335,10 @@ def main():
                 button_exit_score.draw(screen)
 
                 # TODO: REMOVE LINES BELOW
-                phase1_score = [0,756,34,1000,333]
-                phase2_score = [0,756,34,1000,333]
-                phase3_score = [0,756,34,1000,333]
-                victory_order = [1,2,3,4,5]
+                #phase1_score = [0,756,34,1000,333]
+                #phase2_score = [0,756,34,1000,333]
+                #phase3_score = [0,756,34,1000,333]
+                #victory_order = [1,2,3,4,5]
                 
                 text_surf = FONT_BOLD.render(str(phase1_score[0]), False, COLOR_BLUEISH)
                 screen.blit(text_surf, pg.Rect(column1x,player1y,100,100))
@@ -398,25 +397,37 @@ def main():
         if ui_state is 1:
             if run_score is 1:
                 print('RUN SIMULATION')
-                #phase1_score = qe.get_scores(game1.get_text(), number_of_players, True, False)
-                #phase2_score = qe.get_scores(game2.get_text(), number_of_players, True, False)
-                #phase3_score = qe.get_scores(game3.get_text(), number_of_players, True, False)
+                phase1_score = qe.get_scores(game1.get_text(), number_of_players, True, False)
+                phase2_score = qe.get_scores(game2.get_text(), number_of_players, True, False)
+                phase3_score = qe.get_scores(game3.get_text(), number_of_players, True, False)
                 run_score = 0
             elif run_score is 2:
                 print('RUN SIMULATION WITH NOISE')
-                #phase1_score = qe.get_scores(game1.get_text(), number_of_players, True, True)
-                #phase2_score = qe.get_scores(game2.get_text(), number_of_players, True, True)
-                #phase3_score = qe.get_scores(game3.get_text(), number_of_players, True, True)
+                phase1_score = qe.get_scores(game1.get_text(), number_of_players, True, True)
+                phase2_score = qe.get_scores(game2.get_text(), number_of_players, True, True)
+                phase3_score = qe.get_scores(game3.get_text(), number_of_players, True, True)
                 run_score = 0
             elif run_score is 3:
                 print('RUN QUANTUM COMPUTER')
-                #phase1_score = qe.get_scores(game1.get_text(), number_of_players, False)
-                #phase2_score = qe.get_scores(game2.get_text(), number_of_players, False)
-                #phase3_score = qe.get_scores(game3.get_text(), number_of_players, False)
+                phase1_score = qe.get_scores(game1.get_text(), number_of_players, False)
+                phase2_score = qe.get_scores(game2.get_text(), number_of_players, False)
+                phase3_score = qe.get_scores(game3.get_text(), number_of_players, False)
                 run_score = 0
-            #print(phase1_score)
-            #print(phase2_score)
-            #print(phase3_score)
+            print(phase1_score)
+            print(phase2_score)
+            print(phase3_score)
+            
+            total_scores = [phase1_score[i] + phase2_score[i] + phase3_score[i] for i in range(0, 5)]
+            print(total_scores)
+            different_scores = []
+            for score in total_scores:
+                if score not in different_scores:
+                    different_scores.append(score)
+            different_scores.sort(reverse = True)
+            for i in range(0, 5):
+                victory_order[i] = different_scores.index(total_scores[i])+1
+            
+            
 
         pg.display.flip()
         clock.tick(60)

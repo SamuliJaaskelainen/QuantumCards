@@ -6,11 +6,12 @@ pg.init()
 pg.display.set_caption('Quantum Cards')
 pg.display.set_icon(pg.image.load('Icon.png'))
 screen = pg.display.set_mode((1280, 720))
-COLOR_INACTIVE = pg.Color('gray')
-COLOR_ACTIVE = pg.Color('pink')
+COLOR_INACTIVE = pg.Color('white')
+COLOR_ACTIVE = pg.Color(211, 219, 221)
+COLOR_TEXT = pg.Color(90, 120, 142)
 COLOR_BLACK = pg.Color('black')
-FONT = pg.font.Font("Calibri.ttf", 32)
-FONT_BOLD = pg.font.Font("Calibrib.ttf", 24)
+FONT = pg.font.Font("Font/Calibri.ttf", 32)
+FONT_BOLD = pg.font.Font("Font/Calibrib.ttf", 26)
 BG = pg.image.load("GameUI/BG.png")
 BG_RECT = BG.get_rect()
 BUTTON = pg.image.load("Button.png")
@@ -19,17 +20,17 @@ BUTTON_PRESSED = pg.image.load("ButtonPressed.png")
 CORRECT_STRING = pg.image.load("GameUI/correct.png")
 NOT_CORRECT_STRING = pg.image.load("GameUI/notcorrect.png")
 GAME1_RECT = pg.Rect(1174, 288, 38, 39)
-GAME2_RECT = pg.Rect(1174, 388, 38, 39)
-GAME3_RECT = pg.Rect(1174, 488, 38, 39)
+GAME2_RECT = pg.Rect(1174, 390, 38, 39)
+GAME3_RECT = pg.Rect(1174, 490, 38, 39)
 SPEECH_BUBBLE = pg.image.load("GameUI/Speachboubble.png")
 SPEECH_BUBBLE_RECT = pg.Rect(692, 40, 240, 82)
-SPEECH_BUBBLE_TEXT_RECT = pg.Rect(710, 70, 240, 82)
+SPEECH_BUBBLE_TEXT_RECT = pg.Rect(717, 70, 240, 82)
 number_of_players=3
 starting_player = 1
 buttons_players=[]
-pg.mixer.music.load('Music.ogg')
+pg.mixer.music.load('Audio/Music.ogg')
 pg.mixer.music.play(-1)
-BUTTON_SOUNDS = [pg.mixer.Sound('ButtonSound1.ogg'), pg.mixer.Sound('ButtonSound2.ogg'), pg.mixer.Sound('ButtonSound3.ogg')]
+BUTTON_SOUNDS = [pg.mixer.Sound('Audio/ButtonSound1.ogg'), pg.mixer.Sound('Audio/ButtonSound2.ogg'), pg.mixer.Sound('Audio/ButtonSound3.ogg')]
 ui_state=0  #0=game, 1=score, 2=help
 run_score=0 #0=none, 1=simulation, 2=simulation with noise, 3=quantum computer
 check_strings=False
@@ -42,6 +43,7 @@ class InputBox:
     def __init__(self, x, y, w, h, text=''):
         self.rect = pg.Rect(x, y, w, h)
         self.color = COLOR_INACTIVE
+        self.text_color = COLOR_TEXT
         self.text = text
         self.txt_surface = FONT.render(text, True, self.color)
         self.active = False
@@ -64,13 +66,13 @@ class InputBox:
                 elif event.key == pg.K_BACKSPACE:
                     self.text = self.text[:-1]
                 else:
-                    self.text += event.unicode
-                self.txt_surface = FONT.render(self.text, True, self.color)
+                    self.text += event.unicode.upper()
+                self.txt_surface = FONT.render(self.text, True, self.text_color)
                 
         self.color = COLOR_ACTIVE if self.active else COLOR_INACTIVE
 
     def update(self):
-        width = max(1000, self.txt_surface.get_width()+10)
+        width = max(900, self.txt_surface.get_width()+10)
         self.rect.w = width
 
     def draw(self, screen):
@@ -187,14 +189,20 @@ def ShowHelp():
     global ui_state
     ui_state=2
     print('Show help ui')
-
+    
+def ToggleMusic():
+    if pg.mixer.music.get_volume() > 0:
+        pg.mixer.music.set_volume(0)
+    else:
+        pg.mixer.music.set_volume(1)
+        
 def main():
     global run_score, starting_player, check_strings
     clock = pg.time.Clock()
     
-    game1 = InputBox(150, 500, 1000, 32)
-    game2 = InputBox(150, 540, 1000, 32)
-    game3 = InputBox(150, 580, 1000, 32)
+    game1 = InputBox(250, 292, 1000, 32)
+    game2 = InputBox(250, 394, 1000, 32)
+    game3 = InputBox(250, 496, 1000, 32)
     input_boxes = [game1, game2, game3]
     
     button_two_p = ButtonBox(62,57,110,27, pg.image.load("GameUI/2players.png"), pg.image.load("GameUI/2players_hover.png"), pg.image.load("GameUI/2players_select.png"), True, SetPlayerToTwo)
@@ -206,11 +214,12 @@ def main():
     button_simulate_noisy = ButtonBox(385,591,448,93, pg.image.load("GameUI/simulatewithnoise.png"), pg.image.load("GameUI/simulatewithnoise_hover.png"), pg.image.load("GameUI/simulatewithnoise.png"), False, SimulateWithNoise)
     button_calculate = ButtonBox(915,591,292,92, pg.image.load("GameUI/goquantum.png"), pg.image.load("GameUI/goquantum_hover.png"), pg.image.load("GameUI/goquantum.png"), False, Calculate)
     button_help = ButtonBox(1143,40,71,72, pg.image.load("GameUI/help.png"), pg.image.load("GameUI/help_hover.png"), pg.image.load("GameUI/help.png"), False, ShowHelp)
+    button_mute = ButtonBox(1048,40,71,72, pg.image.load("GameUI/music_select.png"), pg.image.load("GameUI/music_hover.png"), pg.image.load("GameUI/music.png"), True, ToggleMusic)
     buttons_players.append(button_two_p)
     buttons_players.append(button_three_p)
     buttons_players.append(button_four_p)
     buttons_players.append(button_five_p)
-    buttons = [button_random_p, button_simulate, button_simulate_noisy, button_calculate, button_help]
+    buttons = [button_random_p, button_simulate, button_simulate_noisy, button_calculate, button_help, button_mute]
     button_five_p.press_event()
     
     button_exit_help = ButtonBox(1000,20,100,32, BUTTON, BUTTON_HOVER, BUTTON_PRESSED, False, ShowGame)
@@ -287,9 +296,8 @@ def main():
             screen.blit(CORRECT_STRING, GAME3_RECT)
             
             screen.blit(SPEECH_BUBBLE, SPEECH_BUBBLE_RECT)
-            starting_player_surface = FONT_BOLD.render("PLAYER " + str(starting_player) + " STARTS", False, (0, 0, 0))
+            starting_player_surface = FONT_BOLD.render("PLAYER " + str(starting_player) + " STARTS", False, (255, 255, 255))
             screen.blit(starting_player_surface, SPEECH_BUBBLE_TEXT_RECT)
-            
             
         elif ui_state is 1:
             button_exit_score.draw(screen)

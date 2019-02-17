@@ -4,7 +4,7 @@ import QuantumEngine as qe
 
 pg.init()
 pg.display.set_caption('Quantum Cards')
-pg.display.set_icon(pg.image.load('Icon.png'))
+pg.display.set_icon(pg.image.load('ScoreUI/victory dot.png'))
 screen = pg.display.set_mode((1280, 720))
 
 COLOR_ACTIVE = pg.Color(211, 219, 221)

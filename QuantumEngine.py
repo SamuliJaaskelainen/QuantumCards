@@ -5,7 +5,13 @@ from qiskit.providers.aer.noise import NoiseModel
 from random import shuffle
 
 def get_scores(game, s, simulate = True, noisy = False):
-
+	
+	score = [0]*5
+	#Check whether it's valid game
+	if not game or not check_game(game, s):
+		return score
+	
+	
 	#Initialisation
 	q = QuantumRegister(s)
 	c = ClassicalRegister(s)
@@ -78,14 +84,13 @@ def get_scores(game, s, simulate = True, noisy = False):
 	counts = sim_result.get_counts(qc)
 
 	#Compute players' scores
-	score = [0]*s
 	for result in counts:
 		c = counts[result]
 		for p in range(0, s):
 			if result[s-1-pq[p]] == "1":
 				score[p] += c
 	
-	return score;
+	return score
 
 def check_game(game, s):
 	gates = {"H": 1, "I": 1, "X": 1, "Y": 1, "Z": 1, "C": 2, "S": 2}	
@@ -110,5 +115,5 @@ def check_game(game, s):
 				break
 		i += gates[g] + 1
 	
-	return valid;
+	return valid
 	

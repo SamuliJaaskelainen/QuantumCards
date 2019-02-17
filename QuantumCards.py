@@ -383,6 +383,9 @@ def main():
                 screen.blit(text_surf, pg.Rect(column4x,player4y,100,100))
                 text_surf = FONT_BOLD.render(str(victory_order[4]), False, COLOR_WHITE)
                 screen.blit(text_surf, pg.Rect(column4x,player5y,100,100))
+            else:
+                text_surf = FONT_BOLD.render("CALCULATING... PLEASE WAIT.", False, COLOR_WHITE)
+                screen.blit(text_surf, pg.Rect(500,120,100,100))
                 
             if number_of_players is 2:
                 screen.blit(HIDE_PLAYERS, pg.Rect(0, 403, 0, 0))
@@ -395,7 +398,8 @@ def main():
             button_exit_help.draw(screen)
             
         if ui_state is 1:
-            if run_score is 1:
+            pg.display.flip()
+            if run_score is 1:                
                 print('RUN SIMULATION')
                 phase1_score = qe.get_scores(game1.get_text(), number_of_players, True, False)
                 phase2_score = qe.get_scores(game2.get_text(), number_of_players, True, False)
@@ -427,8 +431,7 @@ def main():
             for i in range(0, 5):
                 victory_order[i] = different_scores.index(total_scores[i])+1
             
-            
-
+           
         pg.display.flip()
         clock.tick(60)
 

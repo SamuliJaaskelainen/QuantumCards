@@ -7,10 +7,11 @@ pg.display.set_caption('Quantum Cards')
 pg.display.set_icon(pg.image.load('Icon.png'))
 screen = pg.display.set_mode((1280, 720))
 
-COLOR_INACTIVE = pg.Color('white')
 COLOR_ACTIVE = pg.Color(211, 219, 221)
 COLOR_TEXT = pg.Color(90, 120, 142)
 COLOR_BLACK = pg.Color('black')
+COLOR_WHITE = pg.Color('white')
+COLOR_BLUEISH = pg.Color(162, 181, 187)
 FONT = pg.font.Font("Font/Calibri.ttf", 32)
 FONT_BOLD = pg.font.Font("Font/Calibrib.ttf", 26)
 BG = pg.image.load("GameUI/BG.png")
@@ -48,7 +49,7 @@ class InputBox:
 
     def __init__(self, x, y, w, h, text=''):
         self.rect = pg.Rect(x, y, w, h)
-        self.color = COLOR_INACTIVE
+        self.color = COLOR_WHITE
         self.text_color = COLOR_TEXT
         self.text = text
         self.txt_surface = FONT.render(text, True, self.color)
@@ -75,7 +76,7 @@ class InputBox:
                     self.text += event.unicode.upper()
                 self.txt_surface = FONT.render(self.text, True, self.text_color)
                 
-        self.color = COLOR_ACTIVE if self.active else COLOR_INACTIVE
+        self.color = COLOR_ACTIVE if self.active else COLOR_WHITE
 
     def update(self):
         width = max(900, self.txt_surface.get_width()+10)
@@ -229,6 +230,15 @@ def main():
     button_five_p.press_event()
     
     button_exit_score = ButtonBox(1169,108,78,77, pg.image.load("ScoreUI/reset.png"), pg.image.load("ScoreUI/reset_hover.png"), pg.image.load("ScoreUI/reset.png"), False, ShowGame)
+    column1x = 410
+    column2x = 600
+    column3x = 770
+    column4x = 1000
+    player1y = 240
+    player2y = 340
+    player3y = 439
+    player4y = 533
+    player5y = 634
     
     button_exit_help = ButtonBox(1169,108,78,77, pg.image.load("ScoreUI/reset.png"), pg.image.load("ScoreUI/reset_hover.png"), pg.image.load("ScoreUI/reset.png"), False, ShowGame)
     
@@ -302,71 +312,63 @@ def main():
             screen.blit(CORRECT_STRING, GAME3_RECT)
             
             screen.blit(SPEECH_BUBBLE, SPEECH_BUBBLE_RECT)
-            starting_player_surface = FONT_BOLD.render("PLAYER " + str(starting_player) + " STARTS", False, (255, 255, 255))
+            starting_player_surface = FONT_BOLD.render("PLAYER " + str(starting_player) + " STARTS", False, COLOR_WHITE)
             screen.blit(starting_player_surface, SPEECH_BUBBLE_TEXT_RECT)
             
         elif ui_state is 1:
             screen.blit(SCORE_BG, BG_RECT)
-            button_exit_score.draw(screen)
             
             if run_score is 0:
+                button_exit_score.draw(screen)
+
+                # TODO: REMOVE LINES BELOW
                 phase1_score = [0,756,34,1000,333]
                 phase2_score = [0,756,34,1000,333]
                 phase3_score = [0,756,34,1000,333]
                 victory_order = [1,2,3,4,5]
-
-                column1x = 410
-                column2x = 600
-                column3x = 770
-                column4x = 990
-                player1y = 240
-                player2y = 340
-                player3y = 439
-                player4y = 533
-                player5y = 634
                 
-                text_surf = FONT_BOLD.render(str(phase1_score[0]), False, (162, 181, 187))
+                text_surf = FONT_BOLD.render(str(phase1_score[0]), False, COLOR_BLUEISH)
                 screen.blit(text_surf, pg.Rect(column1x,player1y,100,100))
-                text_surf = FONT_BOLD.render(str(phase1_score[1]), False, (162, 181, 187))
+                text_surf = FONT_BOLD.render(str(phase1_score[1]), False, COLOR_BLUEISH)
                 screen.blit(text_surf, pg.Rect(column1x,player2y,100,100))
-                text_surf = FONT_BOLD.render(str(phase1_score[2]), False, (162, 181, 187))
+                text_surf = FONT_BOLD.render(str(phase1_score[2]), False, COLOR_BLUEISH)
                 screen.blit(text_surf, pg.Rect(column1x,player3y,100,100))
-                text_surf = FONT_BOLD.render(str(phase1_score[3]), False, (162, 181, 187))
+                text_surf = FONT_BOLD.render(str(phase1_score[3]), False, COLOR_BLUEISH)
                 screen.blit(text_surf, pg.Rect(column1x,player4y,100,100))
-                text_surf = FONT_BOLD.render(str(phase1_score[4]), False, (162, 181, 187))
+                text_surf = FONT_BOLD.render(str(phase1_score[4]), False, COLOR_BLUEISH)
                 screen.blit(text_surf, pg.Rect(column1x,player5y,100,100))
                 
-                text_surf = FONT_BOLD.render(str(phase2_score[0]), False, (255, 255, 255))
+                text_surf = FONT_BOLD.render(str(phase2_score[0]), False, COLOR_WHITE)
                 screen.blit(text_surf, pg.Rect(column2x,player1y,100,100))
-                text_surf = FONT_BOLD.render(str(phase2_score[1]), False, (255, 255, 255))
+                text_surf = FONT_BOLD.render(str(phase2_score[1]), False, COLOR_WHITE)
                 screen.blit(text_surf, pg.Rect(column2x,player2y,100,100))
-                text_surf = FONT_BOLD.render(str(phase2_score[2]), False, (255, 255, 255))
+                text_surf = FONT_BOLD.render(str(phase2_score[2]), False, COLOR_WHITE)
                 screen.blit(text_surf, pg.Rect(column2x,player3y,100,100))
-                text_surf = FONT_BOLD.render(str(phase2_score[3]), False, (255, 255, 255))
+                text_surf = FONT_BOLD.render(str(phase2_score[3]), False, COLOR_WHITE)
                 screen.blit(text_surf, pg.Rect(column2x,player4y,100,100))
-                text_surf = FONT_BOLD.render(str(phase2_score[4]), False, (255, 255, 255))
+                text_surf = FONT_BOLD.render(str(phase2_score[4]), False, COLOR_WHITE)
                 screen.blit(text_surf, pg.Rect(column2x,player5y,100,100))
                 
-                text_surf = FONT_BOLD.render(str(phase3_score[0]), False, (162, 181, 187))
+                text_surf = FONT_BOLD.render(str(phase3_score[0]), False, COLOR_BLUEISH)
                 screen.blit(text_surf, pg.Rect(column3x,player1y,100,100))
-                text_surf = FONT_BOLD.render(str(phase3_score[1]), False, (162, 181, 187))
+                text_surf = FONT_BOLD.render(str(phase3_score[1]), False, COLOR_BLUEISH)
                 screen.blit(text_surf, pg.Rect(column3x,player2y,100,100))
-                text_surf = FONT_BOLD.render(str(phase3_score[2]), False, (162, 181, 187))
+                text_surf = FONT_BOLD.render(str(phase3_score[2]), False, COLOR_BLUEISH)
                 screen.blit(text_surf, pg.Rect(column3x,player3y,100,100))
-                text_surf = FONT_BOLD.render(str(phase3_score[3]), False, (162, 181, 187))
+                text_surf = FONT_BOLD.render(str(phase3_score[3]), False, COLOR_BLUEISH)
                 screen.blit(text_surf, pg.Rect(column3x,player4y,100,100))
-                text_surf = FONT_BOLD.render(str(phase3_score[4]), False, (162, 181, 187))
+                text_surf = FONT_BOLD.render(str(phase3_score[4]), False, COLOR_BLUEISH)
                 screen.blit(text_surf, pg.Rect(column3x,player5y,100,100))
                 
-                text_surf = FONT_BOLD.render(str(victory_order[0]), False, (255, 255, 255))
+                text_surf = FONT_BOLD.render(str(victory_order[0]), False, COLOR_WHITE)
                 screen.blit(text_surf, pg.Rect(column4x,player1y,100,100))
-                text_surf = FONT_BOLD.render(str(victory_order[1]), False, (255, 255, 255))
+                text_surf = FONT_BOLD.render(str(victory_order[1]), False, COLOR_WHITE)
                 screen.blit(text_surf, pg.Rect(column4x,player2y,100,100))
-                text_surf = FONT_BOLD.render(str(victory_order[2]), False, (255, 255, 255))
+                text_surf = FONT_BOLD.render(str(victory_order[2]), False, COLOR_WHITE)
                 screen.blit(text_surf, pg.Rect(column4x,player3y,100,100))
-                text_surf = FONT_BOLD.render(str(victory_order[3]), False, (255, 255, 255))
+                text_surf = FONT_BOLD.render(str(victory_order[3]), False, COLOR_WHITE)
                 screen.blit(text_surf, pg.Rect(column4x,player4y,100,100))
-                text_surf = FONT_BOLD.render(str(victory_order[4]), False, (255, 255, 255))
+                text_surf = FONT_BOLD.render(str(victory_order[4]), False, COLOR_WHITE)
                 screen.blit(text_surf, pg.Rect(column4x,player5y,100,100))
                 
             if number_of_players is 2:

@@ -32,6 +32,8 @@ SCORE_BG = pg.image.load("ScoreUI/score_BG.png")
 HIDE_PLAYERS = pg.image.load("ScoreUI/hide.png")
 VICTORY_DOT = pg.image.load("ScoreUI/victory dot.png")
 
+HELP_BG = pg.image.load("HelpUI/helpscreen.png")
+
 number_of_players=3
 starting_player = 1
 buttons_players=[]
@@ -248,7 +250,7 @@ def main():
     player5y = 634
     victory_order = [0]*5
     
-    button_exit_help = ButtonBox(1169,108,78,77, pg.image.load("ScoreUI/reset.png"), pg.image.load("ScoreUI/reset_hover.png"), pg.image.load("ScoreUI/reset.png"), False, ShowGame)
+    button_exit_help = ButtonBox(1169,108,78,77, pg.image.load("HelpUI/X.png"), pg.image.load("HelpUI/X_hover.png"), pg.image.load("HelpUI/X.png"), False, ShowGame)
     
     running = True
     while running:
@@ -412,6 +414,7 @@ def main():
                 screen.blit(VICTORY_DOT, pg.Rect(1137,635,0,0))
             
         elif ui_state is 2:
+            screen.blit(HELP_BG, BG_RECT)
             button_exit_help.draw(screen)
             
         if ui_state is 1:

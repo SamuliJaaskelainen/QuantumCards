@@ -84,6 +84,7 @@ def get_scores(game, s, simulate = True, noisy = False):
 	counts = sim_result.get_counts(qc)
 
 	#Compute players' scores
+	score = [0]*5
 	for result in counts:
 		c = counts[result]
 		for p in range(0, s):

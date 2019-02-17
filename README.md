@@ -1,6 +1,6 @@
 Q|Cards⟩ is a card game which uses quantum computers to resolve the winner.
 
-Created during Quantum Wheel, fifth quantum game jam.
+Created during Quantum Wheel, fifth quantum game jam: https://itch.io/jam/quantum-wheel
 
 Instructions, calculation software and printable cards are provided in this repository.
 

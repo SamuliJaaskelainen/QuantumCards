@@ -6,6 +6,7 @@ pg.init()
 pg.display.set_caption('Quantum Cards')
 pg.display.set_icon(pg.image.load('Icon.png'))
 screen = pg.display.set_mode((1280, 720))
+
 COLOR_INACTIVE = pg.Color('white')
 COLOR_ACTIVE = pg.Color(211, 219, 221)
 COLOR_TEXT = pg.Color(90, 120, 142)
@@ -25,6 +26,10 @@ GAME3_RECT = pg.Rect(1174, 490, 38, 39)
 SPEECH_BUBBLE = pg.image.load("GameUI/Speachboubble.png")
 SPEECH_BUBBLE_RECT = pg.Rect(692, 40, 240, 82)
 SPEECH_BUBBLE_TEXT_RECT = pg.Rect(717, 70, 240, 82)
+
+SCORE_BG = pg.image.load("ScoreUI/score_BG.png")
+HIDE_PLAYERS = pg.image.load("ScoreUI/hide.png")
+
 number_of_players=3
 starting_player = 1
 buttons_players=[]
@@ -37,6 +42,7 @@ check_strings=False
 phase1_score = []
 phase2_score = []
 phase3_score = []
+
 
 class InputBox:
 
@@ -222,9 +228,9 @@ def main():
     buttons = [button_random_p, button_simulate, button_simulate_noisy, button_calculate, button_help, button_mute]
     button_five_p.press_event()
     
-    button_exit_help = ButtonBox(1000,20,100,32, BUTTON, BUTTON_HOVER, BUTTON_PRESSED, False, ShowGame)
+    button_exit_score = ButtonBox(1169,108,78,77, pg.image.load("ScoreUI/reset.png"), pg.image.load("ScoreUI/reset_hover.png"), pg.image.load("ScoreUI/reset.png"), False, ShowGame)
     
-    button_exit_score = ButtonBox(1000,20,100,32, BUTTON, BUTTON_HOVER, BUTTON_PRESSED, False, ShowGame)
+    button_exit_help = ButtonBox(1169,108,78,77, pg.image.load("ScoreUI/reset.png"), pg.image.load("ScoreUI/reset_hover.png"), pg.image.load("ScoreUI/reset.png"), False, ShowGame)
     
     running = True
     while running:
@@ -300,7 +306,76 @@ def main():
             screen.blit(starting_player_surface, SPEECH_BUBBLE_TEXT_RECT)
             
         elif ui_state is 1:
+            screen.blit(SCORE_BG, BG_RECT)
             button_exit_score.draw(screen)
+            
+            if run_score is 0:
+                phase1_score = [0,756,34,1000,333]
+                phase2_score = [0,756,34,1000,333]
+                phase3_score = [0,756,34,1000,333]
+                victory_order = [1,2,3,4,5]
+
+                column1x = 410
+                column2x = 600
+                column3x = 770
+                column4x = 990
+                player1y = 240
+                player2y = 340
+                player3y = 439
+                player4y = 533
+                player5y = 634
+                
+                text_surf = FONT_BOLD.render(str(phase1_score[0]), False, (162, 181, 187))
+                screen.blit(text_surf, pg.Rect(column1x,player1y,100,100))
+                text_surf = FONT_BOLD.render(str(phase1_score[1]), False, (162, 181, 187))
+                screen.blit(text_surf, pg.Rect(column1x,player2y,100,100))
+                text_surf = FONT_BOLD.render(str(phase1_score[2]), False, (162, 181, 187))
+                screen.blit(text_surf, pg.Rect(column1x,player3y,100,100))
+                text_surf = FONT_BOLD.render(str(phase1_score[3]), False, (162, 181, 187))
+                screen.blit(text_surf, pg.Rect(column1x,player4y,100,100))
+                text_surf = FONT_BOLD.render(str(phase1_score[4]), False, (162, 181, 187))
+                screen.blit(text_surf, pg.Rect(column1x,player5y,100,100))
+                
+                text_surf = FONT_BOLD.render(str(phase2_score[0]), False, (255, 255, 255))
+                screen.blit(text_surf, pg.Rect(column2x,player1y,100,100))
+                text_surf = FONT_BOLD.render(str(phase2_score[1]), False, (255, 255, 255))
+                screen.blit(text_surf, pg.Rect(column2x,player2y,100,100))
+                text_surf = FONT_BOLD.render(str(phase2_score[2]), False, (255, 255, 255))
+                screen.blit(text_surf, pg.Rect(column2x,player3y,100,100))
+                text_surf = FONT_BOLD.render(str(phase2_score[3]), False, (255, 255, 255))
+                screen.blit(text_surf, pg.Rect(column2x,player4y,100,100))
+                text_surf = FONT_BOLD.render(str(phase2_score[4]), False, (255, 255, 255))
+                screen.blit(text_surf, pg.Rect(column2x,player5y,100,100))
+                
+                text_surf = FONT_BOLD.render(str(phase3_score[0]), False, (162, 181, 187))
+                screen.blit(text_surf, pg.Rect(column3x,player1y,100,100))
+                text_surf = FONT_BOLD.render(str(phase3_score[1]), False, (162, 181, 187))
+                screen.blit(text_surf, pg.Rect(column3x,player2y,100,100))
+                text_surf = FONT_BOLD.render(str(phase3_score[2]), False, (162, 181, 187))
+                screen.blit(text_surf, pg.Rect(column3x,player3y,100,100))
+                text_surf = FONT_BOLD.render(str(phase3_score[3]), False, (162, 181, 187))
+                screen.blit(text_surf, pg.Rect(column3x,player4y,100,100))
+                text_surf = FONT_BOLD.render(str(phase3_score[4]), False, (162, 181, 187))
+                screen.blit(text_surf, pg.Rect(column3x,player5y,100,100))
+                
+                text_surf = FONT_BOLD.render(str(victory_order[0]), False, (255, 255, 255))
+                screen.blit(text_surf, pg.Rect(column4x,player1y,100,100))
+                text_surf = FONT_BOLD.render(str(victory_order[1]), False, (255, 255, 255))
+                screen.blit(text_surf, pg.Rect(column4x,player2y,100,100))
+                text_surf = FONT_BOLD.render(str(victory_order[2]), False, (255, 255, 255))
+                screen.blit(text_surf, pg.Rect(column4x,player3y,100,100))
+                text_surf = FONT_BOLD.render(str(victory_order[3]), False, (255, 255, 255))
+                screen.blit(text_surf, pg.Rect(column4x,player4y,100,100))
+                text_surf = FONT_BOLD.render(str(victory_order[4]), False, (255, 255, 255))
+                screen.blit(text_surf, pg.Rect(column4x,player5y,100,100))
+                
+            if number_of_players is 2:
+                screen.blit(HIDE_PLAYERS, pg.Rect(0, 403, 0, 0))
+            elif number_of_players is 3:
+                screen.blit(HIDE_PLAYERS, pg.Rect(0, 494, 0, 0))
+            elif number_of_players is 4:
+                screen.blit(HIDE_PLAYERS, pg.Rect(0, 592, 0, 0))
+            
         elif ui_state is 2:
             button_exit_help.draw(screen)
             

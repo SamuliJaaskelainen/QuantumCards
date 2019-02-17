@@ -434,12 +434,8 @@ def main():
                 phase2_score = qe.get_scores(game2.get_text(), number_of_players, False)
                 phase3_score = qe.get_scores(game3.get_text(), number_of_players, False)
                 run_score = 0
-            print(phase1_score)
-            print(phase2_score)
-            print(phase3_score)
             
             total_scores = [phase1_score[i] + phase2_score[i] + phase3_score[i] for i in range(0, 5)]
-            print(total_scores)
             different_scores = []
             for score in total_scores:
                 if score not in different_scores:

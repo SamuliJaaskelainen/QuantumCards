@@ -1,17 +1,8 @@
-Credits:
-
-Physicis:
-Sabrina Maniscallo
-Oskari Kerppo
-Guillermo Garcia-Perez
-Jorden Senior
-
-Code:
-Samuli Jääskeläinen
-
-Art:
-Sylvia Smatanova
-Krista Erkkilä
-
-Audio:
-Elie Abraham
+﻿Oskari Kerppo		(Game design, Physics)
+Jorden Senior		(Game design, Physics)
+Sabrina Maniscallo	(Physics)
+Guillermo Garcia-Perez 	(Code, Physics)
+Samuli Jääskeläinen	(Code)
+Sylvia Smatanova	(UI Art)
+Krista Erkkilä		(Card Art)
+Elie Abraham		(Music & Sounds)
